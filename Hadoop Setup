@@ -1,0 +1,104 @@
+Pre
+- Need java 1.8.x
+- HDFS admin user
+- Passwordless Login
+
+Steps to setup hduser
+1] sudo addgroup hadoop
+2] sudo adduser --ingroup hadoop hduser
+3] su root
+4] sudo adduser hduser sudo
+
+Steps for passwordless login
+5] su hduser
+6] cd
+7] ssh-keygen -t rsa -P ""
+8] cat $HOME/.ssh/id_rsa.pub >> $HOME/.ssh/authorized_keys
+9] ssh localhost
+(If machine don't asks for password then passworless login is successfull)
+
+Hadoop Setup
+1] sudo cp /software/hadoop-2.10.1.tar.gz /home/hduser/
+2] sudo chmod 777 hadoop-2.10.1.tar.gz
+3] tar xvzf hadoop-2.10.1.tar.gz
+4] sudo mkdir /usr/local/hadoop/
+5] cd hadoop-2.10.1/
+6] sudo mv * /usr/local/hadoop/
+7] sudo chown -R hduser:hadoop /usr/local/hadoop/
+8] Command to find java path 
+update-alternatives --config java
+9] nano ~/.bashrc (Copy below containts at the end of the file)
+
+#HADOOP VARIABLES START
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/jre
+export HADOOP_INSTALL=/usr/local/hadoop
+export PATH=$PATH:$HADOOP_INSTALL/bin
+export PATH=$PATH:$HADOOP_INSTALL/sbin
+export HADOOP_MAPRED_HOME=$HADOOP_INSTALL
+export HADOOP_COMMON_HOME=$HADOOP_INSTALL
+export HADOOP_HDFS_HOME=$HADOOP_INSTALL
+export YARN_HOME=$HADOOP_INSTALL
+export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_INSTALL/lib/native
+export HADOOP_OPTS="-Djava.library.path=$HADOOP_INSTALL/lib"
+#HADOOP VARIABLES END
+
+10] source ~/.bashrc
+11] nano /usr/local/hadoop/etc/hadoop/hadoop-env.sh (Replace JAVA_HOME path)
+12] sudo mkdir -p /app/hadoop/tmp
+13] sudo chown -R hduser:hadoop /app/hadoop/tmp
+14] nano /usr/local/hadoop/etc/hadoop/core-site.xml (Copy below containts in 
+<configuration> Tab)
+ <property>
+  <name>hadoop.tmp.dir</name>
+  <value>/app/hadoop/tmp</value>
+  <description>A base for other temporary directories.</description>
+ </property>
+
+ <property>
+  <name>fs.default.name</name>
+  <value>hdfs://localhost:54310</value>
+  <description>The name of the default file system.  A URI whose
+  scheme and authority determine the FileSystem implementation.  The
+  uri's scheme determines the config property (fs.SCHEME.impl) naming
+  the FileSystem implementation class.  The uri's authority is used to
+  determine the host, port, etc. for a filesystem.</description>
+ </property>
+
+15] cp /usr/local/hadoop/etc/hadoop/mapred-site.xml.template /usr/local/hadoop/etc/hadoop/mapred-site.xml
+16] nano /usr/local/hadoop/etc/hadoop/mapred-site.xml
+
+ <property>
+  <name>mapred.job.tracker</name>
+  <value>localhost:54311</value>
+  <description>The host and port that the MapReduce job tracker runs
+  at.  If "local", then jobs are run in-process as a single map
+  and reduce task.
+  </description>
+ </property>
+
+17] sudo mkdir -p /usr/local/hadoop_store/hdfs/namenode
+18] sudo mkdir -p /usr/local/hadoop_store/hdfs/datanode
+19] sudo chown -R hduser:hadoop /usr/local/hadoop_store
+20] nano /usr/local/hadoop/etc/hadoop/hdfs-site.xml
+
+<property>
+  <name>dfs.replication</name>
+  <value>1</value>
+  <description>Default block replication.
+  The actual number of replications can be specified when the file is created.
+  The default is used if replication is not specified in create time.
+  </description>
+ </property>
+ <property>
+   <name>dfs.namenode.name.dir</name>
+   <value>file:/usr/local/hadoop_store/hdfs/namenode</value>
+ </property>
+ <property>
+   <name>dfs.datanode.data.dir</name>
+   <value>file:/usr/local/hadoop_store/hdfs/datanode</value>
+ </property>
+
+21] hadoop namenode -format
+22] start-all.sh
+23] jps
+24] stop-all.sh

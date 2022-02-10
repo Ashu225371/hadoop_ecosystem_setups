@@ -1,0 +1,66 @@
+HBase Setup
+1] su hduser
+2] cd
+3] cp /software/hbase-2.3.5-bin.tar.gz /home/hduser/
+4] tar xvzf hbase-2.3.5-bin.tar.gz
+5] cd hbase-2.3.5/
+6] sudo mkdir /usr/local/hbase/
+7] sudo mv * /usr/local/hbase/
+8] sudo chown -R hduser:hadoop /usr/local/hbase/
+9] nano /usr/local/hadoop/etc/hadoop/yarn-site.xml (Write below containts in <configurations>)
+
+ <property>
+      <name>yarn.nodemanager.aux-services</name>
+      <value>mapreduce_shuffle</value>
+   </property>
+
+10] nano /usr/local/hadoop/etc/hadoop/mapred-site.xml 
+
+ <property>
+   <name>mapreduce.framework.name</name>
+   <value>yarn</value>
+ </property>
+
+11] nano ~/.bashrc
+
+export HBASE_HOME=/usr/local/hbase
+export PATH=$PATH:$HBASE_HOME/bin
+
+12] source ~/.bashrc
+13] nano /usr/local/hbase/conf/hbase-env.sh
+
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/jre/
+export HBASE_REGIONSERVERS=/usr/local/hbase/conf/regionservers
+export HBASE_MANAGES_ZK=true
+
+14] nano /usr/local/hbase/conf/hbase-site.xml
+
+ <property>
+    <name>hbase.rootdir</name>
+    <value>hdfs://localhost:54310/hbase</value>
+  </property>
+
+  <property>
+    <name>hbase.cluster.distributed</name>
+    <value>true</value>
+  </property>
+
+  <property>
+    <name>hbase.zookeeper.property.clientPort</name>
+    <value>2222</value>
+  </property>
+
+  <property>
+    <name>hbase.zookeeper.property.dataDir</name>
+    <value>/home/hduser/zookeeper</value>
+  </property>
+
+15] start-all.sh
+16] start-hbase.sh
+
+
+cd /usr/hdp/2.4.0.0-169/hbase
+
+bin/hbase org.apache.hadoop.hbase.mapreduce.ImportTsv -Dimporttsv.separator=’,’ -Dimporttsv.columns=’HBASE_ROW_KEY,cf:ename,cf:designation,cf:manager,cf:hire_date,cf:sal,cf:deptno’ emp_data /user/bdp/hbase/data/emp_data.csv
+
+

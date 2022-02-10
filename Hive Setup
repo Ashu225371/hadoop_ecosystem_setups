@@ -1,0 +1,23 @@
+Hive Setup Steps
+1] su hduser
+2] cd
+3] sudo cp /software/apache-hive-2.3.8-bin.tar.gz /home/hduser/
+4] tar xvzf apache-hive-2.3.8-bin.tar.gz
+5] sudo mkdir /usr/local/hive/
+6] cd apache-hive-2.3.8-bin/
+7] sudo mv * /usr/local/hive/
+8] nano ~/.bashrc
+
+export HIVE_HOME=/usr/local/hive
+export PATH=$PATH:$HIVE_HOME/bin
+export HADOOP_HOME=/usr/local/hadoop
+export PATH=$PATH:$HADOOP_HOME/bin
+
+9] source ~/.bashrc
+10] nano /usr/local/hive/bin/hive-config.sh (Go to end of the file and copy below containts)
+
+export HADOOP_HOME=/usr/local/hadoop
+
+11] cd /home/hduser
+12] schematool -initSchema -dbType derby
+13] hive

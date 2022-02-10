@@ -2,7 +2,9 @@
 I am maintaining this repository for setup the Hadoop ecosystem component on ubuntu 18
 Below are prerequisites:
   1. Java 1.8 latest version( Don't use any other java version)
+  2. Python 3.7 only
 
+Below is the list of softwares we are using:
 
 | Software      | Urls           |
 | ------------- |:-------------:|

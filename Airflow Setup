@@ -18,6 +18,8 @@ sudo pip3 install "apache-airflow==${AIRFLOW_VERSION}" --constraint "${CONSTRAIN
 
 nano ~/.bashrc
 	export PATH=$PATH:~/.local/bin
+	export AIRFLOW_HOME=/usr/local/airflow
+	export PATH=$PATH:$AIRFLOW_HOME/
 source ~/.bashrc
 
 airflow db init

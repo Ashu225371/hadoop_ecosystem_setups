@@ -1,0 +1,16 @@
+su hduser
+cd
+wget https://archive.apache.org/dist/spark/spark-2.4.8/spark-2.4.8-bin-hadoop2.7.tgz
+tar xvzf spark-2.4.8-bin-hadoop2.7.tgz
+sudo mkdir /usr/local/spark/
+cd spark-2.4.8-bin-hadoop2.7/
+sudo mv * /usr/local/spark/
+
+nano ~/.bashrc
+
+export SPARK_HOME=/usr/local/spark/
+export PATH=$PATH:$SPARK_HOME/bin
+
+source ~/.bashrc
+
+spark-shell

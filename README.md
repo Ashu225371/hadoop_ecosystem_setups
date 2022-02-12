@@ -12,3 +12,4 @@ Below is the list of softwares we are using:
 | apache-hive-2.3.8| https://archive.apache.org/dist/hive/hive-2.3.8/apache-hive-2.3.8-bin.tar.gz |
 | hbase-2.3.5 | https://archive.apache.org/dist/hbase/2.3.5/hbase-2.3.5-bin.tar.gz |
 | AIRFLOW_VERSION=2.1.2 | https://raw.githubusercontent.com/apache/airflow/constraints-2.1.2/constraints-3.6.txt |
+| spark-2.4.8-bin-hadoop2.7 | https://archive.apache.org/dist/spark/spark-2.4.8/spark-2.4.8-bin-hadoop2.7.tgz |
